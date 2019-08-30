@@ -2,7 +2,8 @@
 
 ## Requirements
 * Kubernetes 1.15 (Latest version of `minikube` should work)   
-* Kubernetes 1.13/1.14 will work if `CustomResourceWebhookConversion` Feature Gate is enabled
+* Kubernetes 1.13/1.14 will work if `CustomResourceWebhookConversion` [Feature Gate](https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/) is enabled
+* [jq](https://stedolan.github.io/jq/download/)
      
 ## Setup: Deploy the Webhook
 
