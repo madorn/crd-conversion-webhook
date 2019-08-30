@@ -97,7 +97,7 @@ spec:
 ```
 
 ### Bump the CRD to `v1`
-### It contains an updated schema
+### It contains an updated schema along with webhook conversion info.
 
 ```
 apiVersion: apiextensions.k8s.io/v1beta1
