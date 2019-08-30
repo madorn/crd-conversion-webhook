@@ -1,10 +1,10 @@
 # crd-conversion-webhook
 
 ## Requirements
-Kubernetes 1.15 (Latest version of `minikube` should work)   
-Kubernetes 1.13/1.14 will work if `CustomResourceWebhookConversion` Feature Gate is enabled
+* Kubernetes 1.15 (Latest version of `minikube` should work)   
+* Kubernetes 1.13/1.14 will work if `CustomResourceWebhookConversion` Feature Gate is enabled
      
-## Setup the Webhook
+## Setup: Deploy the Webhook
 
 ### Create the dedicated namespace
 ```
@@ -23,7 +23,12 @@ kubectl create -f deployment.yaml
 kubectl create -f service.yaml
 ```
 
-## Simulate the CRD upgrade process
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+
+## Exercise: Simulate the CRD upgrade process
 
 ### Create the initial `v1beta` CRD
 
@@ -81,7 +86,23 @@ kubectl create -f deploy/cr1.yaml
 kubectl get crontab cr1 -o yaml
 ```
 
-### Bump the CRD to `v1`. It contains an updated schema.
+```
+apiVersion: stable.example.com/v1beta1
+kind: CronTab
+metadata:
+  creationTimestamp: 2019-08-30T02:47:31Z
+  generation: 1
+  name: cr1
+  namespace: crd-conversion-webhook
+  resourceVersion: "237787"
+  selfLink: /apis/stable.example.com/v1beta1/namespaces/crd-conversion-webhook/crontabs/cr1
+  uid: f4b7e2b3-cd57-492f-b177-a7dd9df3b1e5
+spec:
+  hostPort: localhost:8080
+```
+
+### Bump the CRD to `v1`
+### It contains an updated schema
 
 ```
 apiVersion: apiextensions.k8s.io/v1beta1
@@ -139,7 +160,7 @@ spec:
  kubectl replace -f deploy/crd2.yaml
  ```
  
-### Although the original `cr1` CR is stored as `v1beta1`, it should now serve as `v1` and reflect a `v1` schema.
+### Although the original `cr1` CR is stored as `v1beta1`, it should now serve as `v1` and reflect a `v1` schema
 
 ```
 kubectl get crontab cr1 -o yaml
@@ -184,7 +205,23 @@ kubectl create -f deploy/cr2.yaml
 kubectl get crontab cr2 -o yaml
 ```
 
-> At this point etcd is storing cr1 (`v1beta1`) and cr2 (`v1`). When you are ready, you can bump all existing stored `v1beta1` versions to `v1` by following the instructions [here](https://kubernetes.io/docs/tasks/access-kubernetes-api/custom-resources/custom-resource-definition-versioning/#upgrade-existing-objects-to-a-new-stored-version)
+```
+apiVersion: stable.example.com/v1
+kind: CronTab
+metadata:
+  creationTimestamp: 2019-08-30T02:51:07Z
+  generation: 1
+  name: cr2
+  namespace: crd-conversion-webhook
+  resourceVersion: "238052"
+  selfLink: /apis/stable.example.com/v1/namespaces/crd-conversion-webhook/crontabs/cr2
+  uid: 553ae7ab-0e4d-4255-83cb-760c8b1b730b
+spec:
+  host: localhost
+  port: "8080"
+```
+
+**Note**: At this point etcd is storing cr1 (`v1beta1`) and cr2 (`v1`). When you are ready, you can bump all existing stored `v1beta1` versions to `v1` by following the instructions [here](https://kubernetes.io/docs/tasks/access-kubernetes-api/custom-resources/custom-resource-definition-versioning/#upgrade-existing-objects-to-a-new-stored-version)
 
 
 ### If you want to downgrade, update the CRD to no longer serve and store `v1`
@@ -245,7 +282,7 @@ spec:
 kubectl apply -f deploy/crd3-downgrade.yaml
 ```
 
-### All versions should now appear to serve from `v1beta1` and reflect the `v1beta1` schema.
+### All versions should now appear to serve from `v1beta1` and reflect the `v1beta1` schema
 
 ```
 kubectl get crontab cr2 -o yaml
