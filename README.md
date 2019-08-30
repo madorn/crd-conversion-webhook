@@ -97,7 +97,10 @@ spec:
 ```
 
 ### Bump the CRD to `v1`
-### It contains an updated schema
+### It contains an updated schema along with webhook conversion info.
+
+> You can fetch the `caBundle` value via `export CA_BUNDLE=$(kubectl get configmap -n kube-system extension-apiserver-authentication -o=jsonpath='{.data.client-ca-file}' | base64 | tr -d '\n')`
+
 
 ```
 apiVersion: apiextensions.k8s.io/v1beta1
