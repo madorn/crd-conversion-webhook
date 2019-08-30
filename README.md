@@ -75,18 +75,10 @@ spec:
 kubectl create -f deploy/cr1.yaml
 ```
 
-### Setup local proxy
-
-```
-kubectl proxy --port=8001
-```
-
 ### Confirm you can get the `v1beta1` CR
 
 ```
-curl -X GET \
-http://localhost:8001/apis/stable.example.com/v1beta1/namespaces/crd-conversion-webhook/crontabs/cr1 \
-| jq
+kubectl get --raw /apis/stable.example.com/v1beta1/namespaces/crd-conversion-webhook/crontabs/cr1 | jq
 ```
 
 ```
@@ -166,9 +158,7 @@ spec:
 ### `cr1` CR is stored as `v1beta1`, but it can now serve as `v1` and reflect a `v1` schema.
 
 ```
-curl -X GET \
-http://localhost:8001/apis/stable.example.com/v1/namespaces/crd-conversion-webhook/crontabs/cr1 \
-| jq
+kubectl get --raw /apis/stable.example.com/v1/namespaces/crd-conversion-webhook/crontabs/cr1 | jq
 ```
 
 ```
@@ -207,9 +197,7 @@ kubectl create -f deploy/cr2.yaml
 ### Confirm you can get the `v1` CR
 
 ```
-curl -X GET \
-http://localhost:8001/apis/stable.example.com/v1/namespaces/crd-conversion-webhook/crontabs/cr2 \
-| jq
+kubectl get --raw apis/stable.example.com/v1/namespaces/crd-conversion-webhook/crontabs/cr2 | jq
 ```
 
 ```
@@ -292,9 +280,7 @@ kubectl apply -f deploy/crd3-downgrade.yaml
 ### `cr2` should now appear to serve from `v1beta1` and reflect the `v1beta1` schema
 
 ```
-curl -X GET \
-http://localhost:8001/apis/stable.example.com/v1beta1/namespaces/crd-conversion-webhook/crontabs/cr2 \
-| jq
+kubectl get --raw /apis/stable.example.com/v1beta1/namespaces/crd-conversion-webhook/crontabs/cr2 | jq
 ```
 
 ```
