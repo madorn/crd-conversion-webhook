@@ -8,19 +8,19 @@
 
 ### Create the dedicated namespace
 ```
-kubectl create -f namespace.yaml
+kubectl create -f deploy/namespace.yaml
 ```
 ### Create the secret that contains the signed cert and private key
 ```
-kubectl create -f sample-secret.yaml
+kubectl create -f deploy/sample-secret.yaml
 ```
 ### Create the webhook pod
 ```
-kubectl create -f deployment.yaml
+kubectl create -f deploy/deployment.yaml
 ```
 ### Expose the webhook pod as a ClusterIP service
 ```
-kubectl create -f service.yaml
+kubectl create -f deploy/service.yaml
 ```
 
 &nbsp;
@@ -61,7 +61,7 @@ spec:
 ```
 
 ```
-kubectl create -f crd1.yaml
+kubectl create -f deploy/crd1.yaml
 ```
 
 ### Create the `v1beta` CR
