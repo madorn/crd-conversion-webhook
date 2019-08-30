@@ -1,0 +1,64 @@
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+  # name must match the spec fields below, and be in the form: <plural>.<group>
+  name: crontabs.stable.example.com
+spec:
+  preserveUnknownFields: false
+  # group name to use for REST API: /apis/<group>/<version>
+  group: stable.example.com
+  # list of versions supported by this CustomResourceDefinition
+  versions:
+  - name: v1beta1
+    # Each version can be enabled/disabled by Served flag.
+    served: true
+    # One and only one version must be marked as the storage version.
+    storage: true
+    # Each version can define it's own schema when there is no top-level
+    # schema is defined.
+    schema:
+      openAPIV3Schema:
+        type: object
+        properties:
+          spec:
+            type: object
+            properties:
+              hostPort:
+                type: string
+  - name: v1
+    served: false
+    storage: false
+    schema:
+      openAPIV3Schema:
+        type: object
+        properties:
+          spec:
+            type: object
+            properties:
+              host:
+                type: string
+              port:
+                type: string
+  conversion:
+    # a Webhook strategy instruct API server to call an external webhook for any conversion between custom resources.
+    strategy: Webhook
+    # webhookClientConfig is required when strategy is `Webhook` and it configure the webhook endpoint to be
+    # called by API server.
+    webhookClientConfig:
+      service:
+        namespace: crd-conversion-webhook
+        name: crd-conversion-webhook
+        path: /crdconvert
+      caBundle: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUM1ekNDQWMrZ0F3SUJBZ0lCQVRBTkJna3Foa2lHOXcwQkFRc0ZBREFWTVJNd0VRWURWUVFERXdwdGFXNXAKYTNWaVpVTkJNQjRYRFRFNU1ERXdPVEU1TkRNd01Gb1hEVEk1TURFd056RTVORE13TUZvd0ZURVRNQkVHQTFVRQpBeE1LYldsdWFXdDFZbVZEUVRDQ0FTSXdEUVlKS29aSWh2Y05BUUVCQlFBRGdnRVBBRENDQVFvQ2dnRUJBTnhECmE3NEptc2NVSGRxSWVOQ29nQjZHaUllMnhZai9nWUl2WU82eGVCSmFISlF0NXJZdUVMcWpEbU9qK1R4QisxQUUKK2UyRnNkNXplME94WWx2V3FOTWVrWm5USVE2ZCtqRnZwc2JBNHMrbW5wQkVuR04vUXA1WXdEdDBRZnEyd0x1QwpCaW0rWHMwTVNROHEyWUZDRUpsUUhUbU5YeGRlOFcySVJaK1R0RTV2U0V4VW5oL2M4dDgzd3VqS2ZwTXV0MXJIClhFOEJzVjBjcm5sOVBmR0lsbFJ4VHp5ZFMzWUlIZXBJaDQrb251Q1dSTHhEOU1Lci9GRUV1ZWJObloxYng0cmQKd0JHU1p1MjQ2Q1BlYmhmckxhOTdZdEtZVnRCTm1FRlJpdHRRV2RqZXBLWDRnS2trSnNTeU1xSVI4VWlCRkFJZApneldDc2pvKzluR25XVk5TMEtNQ0F3RUFBYU5DTUVBd0RnWURWUjBQQVFIL0JBUURBZ0trTUIwR0ExVWRKUVFXCk1CUUdDQ3NHQVFVRkJ3TUNCZ2dyQmdFRkJRY0RBVEFQQmdOVkhSTUJBZjhFQlRBREFRSC9NQTBHQ1NxR1NJYjMKRFFFQkN3VUFBNElCQVFBY3lScmtEWVhybDlLVE55dzc4TVY0K1dDUEhUVEEwa3kvZE9vdFJnV0pRTXl2Yk5CNworZ3hvRGxSR0pNZmVDU09uL0NoaVhoWFNldk5EWVk4UmZ6Zm0yWjFMNVJuRmRuS1ZaaG5ZWnFjaWZ5WlFtZTI1Ck5zLzEwUHlrTkplWFpmdEhvTnNqbFc0dndvWkJsdmxrVEtrOExmTVBUSTVERUxTa3ZJK0ZxNTNhM3REdXlvanEKYlQ5cEYwTGxacDR2Rk9SOGVYbmtaVTN5ZDVQbDFBMWhqcDJVTG9aV05JY2pEbWVhQ3dsMTdZdlpLUlpHWCt6bApUNktOS0pEYm04a0pZSzhrTCtpT3VwaGZaRUpFaUJwcEwwOXNIeHU1Y0FNRVp4c3JSakhNMDdrclpjdnBiUU5sCmU2b1hndmUvZEJrM1FVdFVRbStETTRkSTdEa1BjRGI1R3Y3VQotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg== 
+  # either Namespaced or Cluster
+  scope: Namespaced
+  names:
+    # plural name to be used in the URL: /apis/<group>/<version>/<plural>
+    plural: crontabs
+    # singular name to be used as an alias on the CLI and for display
+    singular: crontab
+    # kind is normally the CamelCased singular type. Your resource manifests use this.
+    kind: CronTab
+    # shortNames allow shorter string to match your resource on the CLI
+    shortNames:
+    - ct

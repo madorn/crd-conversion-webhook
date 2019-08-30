@@ -1,0 +1,7 @@
+apiVersion: stable.example.com/v1beta1
+kind: CronTab
+metadata:
+  name: cr1
+  namespace: crd-conversion-webhook
+spec:
+  hostPort: "localhost:8080"
