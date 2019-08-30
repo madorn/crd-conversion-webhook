@@ -56,7 +56,7 @@ if [[ ${SERVER_CERT} == '' ]]; then
 fi
 echo ${SERVER_CERT} | openssl base64 -d -A -out ${TEMP_DIRECTORY}/server-cert.pem
 
-kubectl create secret generic ingress-nginx.svc \
+kubectl create secret generic crd-conversion-webhook.crd-conversion-webhook.svc \
     --from-file=key.pem=${TEMP_DIRECTORY}/server-key.pem \
     --from-file=cert.pem=${TEMP_DIRECTORY}/server-cert.pem \
     -n ${NAMESPACE}
